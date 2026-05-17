@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FitMax Pro</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(180deg,#0b0b0b,#111);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:18px;
+  font-size:22px;
+  font-weight:bold;
+  color:#ff3b30;
+  letter-spacing:1px;
+  animation:fadeDown 0.6s ease;
+}
+
+/* PAGES */
+.page{
+  display:none;
+  padding:15px;
+  animation:fadeIn 0.4s ease;
+}
+
+.active{
+  display:block;
+}
+
+/* CARDS */
+.card{
+  background:#1c1c1c;
+  margin:12px 0;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+  transform:scale(1);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:scale(1.02);
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:12px;
+  background:#ff3b30;
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-size:15px;
+  margin-top:10px;
+  transition:0.2s;
+}
+
+.btn:active{
+  transform:scale(0.96);
+}
+
+/* INPUT */
+input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border:none;
+  border-radius:8px;
+  background:#2a2a2a;
+  color:white;
+}
+
+/* BOTTOM NAV */
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#1c1c1c;
+  border-top:1px solid #333;
+}
+
+.nav button{
+  flex:1;
+  padding:12px;
+  background:none;
+  border:none;
+  color:white;
+  font-size:12px;
+  transition:0.2s;
+}
+
+.nav button:active{
+  background:#ff3b30;
+}
+
+/* AD PLACEHOLDER */
+.ad{
+  background:#2a2a2a;
+  padding:12px;
+  text-align:center;
+  border-radius:10px;
+  margin:10px 0;
+  font-size:12px;
+  color:#aaa;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes fadeDown{
+  from{opacity:0; transform:translateY(-10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🔥 FITMAX PRO GYM</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+  <div class="card">
+    <h3>Welcome Athlete 💪</h3>
+    <p>Train daily. Stay consistent. Build discipline.</p>
+  </div>
+
+  <div class="ad">AdMob Banner Space (Insert Ad Here)</div>
+
+  <div class="card">
+    <h3>Quick Workout Timer</h3>
+    <button class="btn" onclick="startTimer()">Start 60s Timer</button>
+    <p id="timer">Ready</p>
+  </div>
+
+</div>
+
+<!-- WORKOUT -->
+<div id="workout" class="page">
+
+  <div class="card">
+    <h3>Chest Day</h3>
+    <p>Push Ups - 3x15</p>
+    <p>Bench Press - 4x10</p>
+    <button class="btn" onclick="complete('chest')">Mark Complete</button>
+  </div>
+
+  <div class="card">
+    <h3>Leg Day</h3>
+    <p>Squats - 4x12</p>
+    <p>Lunges - 3x10</p>
+    <button class="btn" onclick="complete('legs')">Mark Complete</button>
+  </div>
+
+  <div class="card">
+    <h3>Arm Day</h3>
+    <p>Bicep Curls - 3x12</p>
+    <p>Tricep Dips - 3x10</p>
+    <button class="btn" onclick="complete('arms')">Mark Complete</button>
+  </div>
+
+  <div class="card">
+    <h3>Progress Tracker</h3>
+    <p id="progress"></p>
+  </div>
+
+  <div class="ad">AdMob Interstitial Trigger Zone</div>
+
+</div>
+
+<!-- BMI -->
+<div id="bmi" class="page">
+
+  <div class="card">
+    <h3>BMI Calculator</h3>
+    <input id="w" placeholder="Weight (kg)">
+    <input id="h" placeholder="Height (cm)">
+    <button class="btn" onclick="calcBMI()">Calculate BMI</button>
+    <p id="result"></p>
+  </div>
+
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="page">
+
+  <div class="card">
+    <h3>Settings</h3>
+    <p>Offline Mode Enabled</p>
+  </div>
+
+  <div class="ad">AdMob Rewarded Ad Space</div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="nav">
+  <button onclick="show('home')">Home</button>
+  <button onclick="show('workout')">Workout</button>
+  <button onclick="show('bmi')">BMI</button>
+  <button onclick="show('settings')">Settings</button>
+</div>
+
+<script>
+
+// NAVIGATION
+function show(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// TIMER
+let t;
+function startTimer(){
+  let time = 60;
+  document.getElementById("timer").innerText = time + " sec";
+
+  t = setInterval(()=>{
+    time--;
+    document.getElementById("timer").innerText = time + " sec";
+
+    if(time <= 0){
+      clearInterval(t);
+      alert("Rest Complete!");
+    }
+  },1000);
+}
+
+// PROGRESS SAVE (OFFLINE)
+function complete(x){
+  localStorage.setItem(x,"Completed");
+  updateProgress();
+}
+
+function updateProgress(){
+  let c = localStorage.getItem("chest") || "Not Done";
+  let l = localStorage.getItem("legs") || "Not Done";
+  let a = localStorage.getItem("arms") || "Not Done";
+
+  document.getElementById("progress").innerText =
+  "Chest: " + c + "\nLegs: " + l + "\nArms: " + a;
+}
+
+updateProgress();
+
+// BMI CALCULATOR
+function calcBMI(){
+  let w = document.getElementById("w").value;
+  let h = document.getElementById("h").value / 100;
+
+  let bmi = w / (h*h);
+
+  document.getElementById("result").innerText =
+  "Your BMI: " + bmi.toFixed(1);
+}
+
+</script>
+
+</body>
+</html>
